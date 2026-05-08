@@ -1,0 +1,25 @@
+# Node
+node_modules/
+dist/
+.vite/
+
+# .NET
+bin/
+obj/
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Secrets / local settings
+.env
+appsettings.Development.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
