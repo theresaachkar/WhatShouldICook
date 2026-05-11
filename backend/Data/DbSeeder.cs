@@ -23,7 +23,6 @@ public static class DbSeeder
         {
             var ingredients = new List<Ingredient>
             {
-                // Basic vegetables
                 new() { Name = "Onion" },
                 new() { Name = "Garlic" },
                 new() { Name = "Tomato" },
@@ -40,7 +39,6 @@ public static class DbSeeder
                 new() { Name = "Mushroom" },
                 new() { Name = "Corn" },
 
-                // Protein
                 new() { Name = "Chicken" },
                 new() { Name = "Ground Beef" },
                 new() { Name = "Beef" },
@@ -51,7 +49,6 @@ public static class DbSeeder
                 new() { Name = "Chickpeas" },
                 new() { Name = "Lentils" },
 
-                // Dairy
                 new() { Name = "Labneh" },
                 new() { Name = "Akkawi Cheese" },
                 new() { Name = "Halloumi Cheese" },
@@ -62,7 +59,6 @@ public static class DbSeeder
                 new() { Name = "Milk" },
                 new() { Name = "Butter" },
 
-                // Grains / bread
                 new() { Name = "Rice" },
                 new() { Name = "Pasta" },
                 new() { Name = "Bulgur" },
@@ -70,7 +66,6 @@ public static class DbSeeder
                 new() { Name = "Bread" },
                 new() { Name = "Flour" },
 
-                // Pantry / sauces
                 new() { Name = "Olive Oil" },
                 new() { Name = "Salt" },
                 new() { Name = "Black Pepper" },
@@ -89,7 +84,6 @@ public static class DbSeeder
                 new() { Name = "Ginger" },
                 new() { Name = "Honey" },
 
-                // Fruit / extras
                 new() { Name = "Avocado" },
                 new() { Name = "Banana" },
                 new() { Name = "Apple" },
@@ -104,7 +98,6 @@ public static class DbSeeder
         {
             var recipes = new List<Recipe>
             {
-                // Lebanese
                 new() { Title = "Mujaddara", Minutes = 45, Instructions = "Cook lentils and rice, then top with fried onions and serve warm.", IsPublic = true },
                 new() { Title = "Riz 3a Djej", Minutes = 50, Instructions = "Cook chicken, prepare spiced rice, then serve together.", IsPublic = true },
                 new() { Title = "Chicken Shawarma Plate", Minutes = 35, Instructions = "Marinate chicken with yogurt, lemon, and garlic. Cook and serve with bread.", IsPublic = true },
@@ -121,7 +114,6 @@ public static class DbSeeder
                 new() { Title = "Fattoush", Minutes = 15, Instructions = "Mix lettuce, tomato, cucumber, parsley, mint, and toasted pita with lemon and olive oil.", IsPublic = true },
                 new() { Title = "Halloumi Salad", Minutes = 15, Instructions = "Grill halloumi and serve it over lettuce, tomato, cucumber, and olive oil.", IsPublic = true },
 
-                // International
                 new() { Title = "Margherita Pizza", Minutes = 25, Instructions = "Prepare dough, spread tomato sauce, add mozzarella, and bake until golden.", IsPublic = true },
                 new() { Title = "Spaghetti Bolognese", Minutes = 40, Instructions = "Cook ground beef with onion, garlic, tomato, and tomato paste. Serve over pasta.", IsPublic = true },
                 new() { Title = "Chicken Stir Fry", Minutes = 20, Instructions = "Cook chicken with vegetables, garlic, ginger, and soy sauce.", IsPublic = true },
@@ -145,7 +137,6 @@ public static class DbSeeder
 
             var recipeIngredients = new List<RecipeIngredient>
             {
-                // Mujaddara
                 new() { RecipeId = FindRecipe("Mujaddara").Id, IngredientId = FindIngredient("Lentils").Id },
                 new() { RecipeId = FindRecipe("Mujaddara").Id, IngredientId = FindIngredient("Rice").Id },
                 new() { RecipeId = FindRecipe("Mujaddara").Id, IngredientId = FindIngredient("Onion").Id },
@@ -153,7 +144,6 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Mujaddara").Id, IngredientId = FindIngredient("Salt").Id },
                 new() { RecipeId = FindRecipe("Mujaddara").Id, IngredientId = FindIngredient("Cumin").Id },
 
-                // Riz 3a Djej
                 new() { RecipeId = FindRecipe("Riz 3a Djej").Id, IngredientId = FindIngredient("Chicken").Id },
                 new() { RecipeId = FindRecipe("Riz 3a Djej").Id, IngredientId = FindIngredient("Rice").Id },
                 new() { RecipeId = FindRecipe("Riz 3a Djej").Id, IngredientId = FindIngredient("Onion").Id },
@@ -161,7 +151,7 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Riz 3a Djej").Id, IngredientId = FindIngredient("Salt").Id },
                 new() { RecipeId = FindRecipe("Riz 3a Djej").Id, IngredientId = FindIngredient("Olive Oil").Id },
 
-                // Chicken Shawarma Plate
+
                 new() { RecipeId = FindRecipe("Chicken Shawarma Plate").Id, IngredientId = FindIngredient("Chicken").Id },
                 new() { RecipeId = FindRecipe("Chicken Shawarma Plate").Id, IngredientId = FindIngredient("Garlic").Id },
                 new() { RecipeId = FindRecipe("Chicken Shawarma Plate").Id, IngredientId = FindIngredient("Yogurt").Id },
@@ -170,7 +160,6 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Chicken Shawarma Plate").Id, IngredientId = FindIngredient("Salt").Id },
                 new() { RecipeId = FindRecipe("Chicken Shawarma Plate").Id, IngredientId = FindIngredient("Pita Bread").Id },
 
-                // Kafta with Potatoes
                 new() { RecipeId = FindRecipe("Kafta with Potatoes").Id, IngredientId = FindIngredient("Ground Beef").Id },
                 new() { RecipeId = FindRecipe("Kafta with Potatoes").Id, IngredientId = FindIngredient("Onion").Id },
                 new() { RecipeId = FindRecipe("Kafta with Potatoes").Id, IngredientId = FindIngredient("Parsley").Id },
@@ -178,40 +167,33 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Kafta with Potatoes").Id, IngredientId = FindIngredient("Salt").Id },
                 new() { RecipeId = FindRecipe("Kafta with Potatoes").Id, IngredientId = FindIngredient("Seven Spices").Id },
 
-                // Lentil Soup
                 new() { RecipeId = FindRecipe("Lentil Soup").Id, IngredientId = FindIngredient("Lentils").Id },
                 new() { RecipeId = FindRecipe("Lentil Soup").Id, IngredientId = FindIngredient("Onion").Id },
                 new() { RecipeId = FindRecipe("Lentil Soup").Id, IngredientId = FindIngredient("Carrot").Id },
                 new() { RecipeId = FindRecipe("Lentil Soup").Id, IngredientId = FindIngredient("Cumin").Id },
                 new() { RecipeId = FindRecipe("Lentil Soup").Id, IngredientId = FindIngredient("Salt").Id },
 
-                // Batata Harra
                 new() { RecipeId = FindRecipe("Batata Harra").Id, IngredientId = FindIngredient("Potato").Id },
                 new() { RecipeId = FindRecipe("Batata Harra").Id, IngredientId = FindIngredient("Garlic").Id },
                 new() { RecipeId = FindRecipe("Batata Harra").Id, IngredientId = FindIngredient("Parsley").Id },
                 new() { RecipeId = FindRecipe("Batata Harra").Id, IngredientId = FindIngredient("Olive Oil").Id },
                 new() { RecipeId = FindRecipe("Batata Harra").Id, IngredientId = FindIngredient("Paprika").Id },
 
-                // Tuna Sandwich
                 new() { RecipeId = FindRecipe("Tuna Sandwich").Id, IngredientId = FindIngredient("Tuna").Id },
                 new() { RecipeId = FindRecipe("Tuna Sandwich").Id, IngredientId = FindIngredient("Bread").Id },
                 new() { RecipeId = FindRecipe("Tuna Sandwich").Id, IngredientId = FindIngredient("Mayonnaise").Id },
 
-                // Cheese Omelette
                 new() { RecipeId = FindRecipe("Cheese Omelette").Id, IngredientId = FindIngredient("Eggs").Id },
                 new() { RecipeId = FindRecipe("Cheese Omelette").Id, IngredientId = FindIngredient("Akkawi Cheese").Id },
                 new() { RecipeId = FindRecipe("Cheese Omelette").Id, IngredientId = FindIngredient("Butter").Id },
 
-                // Labneh with Olive Oil
                 new() { RecipeId = FindRecipe("Labneh with Olive Oil").Id, IngredientId = FindIngredient("Labneh").Id },
                 new() { RecipeId = FindRecipe("Labneh with Olive Oil").Id, IngredientId = FindIngredient("Olive Oil").Id },
                 new() { RecipeId = FindRecipe("Labneh with Olive Oil").Id, IngredientId = FindIngredient("Bread").Id },
 
-                // Akkawi Cheese Sandwich
                 new() { RecipeId = FindRecipe("Akkawi Cheese Sandwich").Id, IngredientId = FindIngredient("Akkawi Cheese").Id },
                 new() { RecipeId = FindRecipe("Akkawi Cheese Sandwich").Id, IngredientId = FindIngredient("Bread").Id },
 
-                // Tabbouleh
                 new() { RecipeId = FindRecipe("Tabbouleh").Id, IngredientId = FindIngredient("Parsley").Id },
                 new() { RecipeId = FindRecipe("Tabbouleh").Id, IngredientId = FindIngredient("Tomato").Id },
                 new() { RecipeId = FindRecipe("Tabbouleh").Id, IngredientId = FindIngredient("Onion").Id },
@@ -221,7 +203,6 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Tabbouleh").Id, IngredientId = FindIngredient("Mint").Id },
                 new() { RecipeId = FindRecipe("Tabbouleh").Id, IngredientId = FindIngredient("Salt").Id },
 
-                // Hummus
                 new() { RecipeId = FindRecipe("Hummus").Id, IngredientId = FindIngredient("Chickpeas").Id },
                 new() { RecipeId = FindRecipe("Hummus").Id, IngredientId = FindIngredient("Tahini").Id },
                 new() { RecipeId = FindRecipe("Hummus").Id, IngredientId = FindIngredient("Garlic").Id },
@@ -229,7 +210,6 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Hummus").Id, IngredientId = FindIngredient("Olive Oil").Id },
                 new() { RecipeId = FindRecipe("Hummus").Id, IngredientId = FindIngredient("Salt").Id },
 
-                // Falafel
                 new() { RecipeId = FindRecipe("Falafel").Id, IngredientId = FindIngredient("Chickpeas").Id },
                 new() { RecipeId = FindRecipe("Falafel").Id, IngredientId = FindIngredient("Parsley").Id },
                 new() { RecipeId = FindRecipe("Falafel").Id, IngredientId = FindIngredient("Onion").Id },
@@ -237,7 +217,6 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Falafel").Id, IngredientId = FindIngredient("Cumin").Id },
                 new() { RecipeId = FindRecipe("Falafel").Id, IngredientId = FindIngredient("Salt").Id },
 
-                // Fattoush
                 new() { RecipeId = FindRecipe("Fattoush").Id, IngredientId = FindIngredient("Lettuce").Id },
                 new() { RecipeId = FindRecipe("Fattoush").Id, IngredientId = FindIngredient("Tomato").Id },
                 new() { RecipeId = FindRecipe("Fattoush").Id, IngredientId = FindIngredient("Cucumber").Id },
@@ -248,7 +227,6 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Fattoush").Id, IngredientId = FindIngredient("Olive Oil").Id },
                 new() { RecipeId = FindRecipe("Fattoush").Id, IngredientId = FindIngredient("Salt").Id },
 
-                // Halloumi Salad
                 new() { RecipeId = FindRecipe("Halloumi Salad").Id, IngredientId = FindIngredient("Halloumi Cheese").Id },
                 new() { RecipeId = FindRecipe("Halloumi Salad").Id, IngredientId = FindIngredient("Lettuce").Id },
                 new() { RecipeId = FindRecipe("Halloumi Salad").Id, IngredientId = FindIngredient("Tomato").Id },
@@ -256,7 +234,6 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Halloumi Salad").Id, IngredientId = FindIngredient("Olive Oil").Id },
                 new() { RecipeId = FindRecipe("Halloumi Salad").Id, IngredientId = FindIngredient("Lemon").Id },
 
-                // Margherita Pizza
                 new() { RecipeId = FindRecipe("Margherita Pizza").Id, IngredientId = FindIngredient("Flour").Id },
                 new() { RecipeId = FindRecipe("Margherita Pizza").Id, IngredientId = FindIngredient("Tomato").Id },
                 new() { RecipeId = FindRecipe("Margherita Pizza").Id, IngredientId = FindIngredient("Tomato Paste").Id },
@@ -264,7 +241,6 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Margherita Pizza").Id, IngredientId = FindIngredient("Olive Oil").Id },
                 new() { RecipeId = FindRecipe("Margherita Pizza").Id, IngredientId = FindIngredient("Salt").Id },
 
-                // Spaghetti Bolognese
                 new() { RecipeId = FindRecipe("Spaghetti Bolognese").Id, IngredientId = FindIngredient("Pasta").Id },
                 new() { RecipeId = FindRecipe("Spaghetti Bolognese").Id, IngredientId = FindIngredient("Ground Beef").Id },
                 new() { RecipeId = FindRecipe("Spaghetti Bolognese").Id, IngredientId = FindIngredient("Onion").Id },
@@ -274,7 +250,6 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Spaghetti Bolognese").Id, IngredientId = FindIngredient("Olive Oil").Id },
                 new() { RecipeId = FindRecipe("Spaghetti Bolognese").Id, IngredientId = FindIngredient("Salt").Id },
 
-                // Chicken Stir Fry
                 new() { RecipeId = FindRecipe("Chicken Stir Fry").Id, IngredientId = FindIngredient("Chicken").Id },
                 new() { RecipeId = FindRecipe("Chicken Stir Fry").Id, IngredientId = FindIngredient("Onion").Id },
                 new() { RecipeId = FindRecipe("Chicken Stir Fry").Id, IngredientId = FindIngredient("Green Pepper").Id },
@@ -283,26 +258,22 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Chicken Stir Fry").Id, IngredientId = FindIngredient("Ginger").Id },
                 new() { RecipeId = FindRecipe("Chicken Stir Fry").Id, IngredientId = FindIngredient("Soy Sauce").Id },
 
-                // Grilled Cheese Sandwich
                 new() { RecipeId = FindRecipe("Grilled Cheese Sandwich").Id, IngredientId = FindIngredient("Bread").Id },
                 new() { RecipeId = FindRecipe("Grilled Cheese Sandwich").Id, IngredientId = FindIngredient("Cheddar").Id },
                 new() { RecipeId = FindRecipe("Grilled Cheese Sandwich").Id, IngredientId = FindIngredient("Butter").Id },
 
-                // Pancakes
                 new() { RecipeId = FindRecipe("Pancakes").Id, IngredientId = FindIngredient("Flour").Id },
                 new() { RecipeId = FindRecipe("Pancakes").Id, IngredientId = FindIngredient("Milk").Id },
                 new() { RecipeId = FindRecipe("Pancakes").Id, IngredientId = FindIngredient("Eggs").Id },
                 new() { RecipeId = FindRecipe("Pancakes").Id, IngredientId = FindIngredient("Sugar").Id },
                 new() { RecipeId = FindRecipe("Pancakes").Id, IngredientId = FindIngredient("Butter").Id },
 
-                // Caesar Salad
                 new() { RecipeId = FindRecipe("Caesar Salad").Id, IngredientId = FindIngredient("Lettuce").Id },
                 new() { RecipeId = FindRecipe("Caesar Salad").Id, IngredientId = FindIngredient("Chicken").Id },
                 new() { RecipeId = FindRecipe("Caesar Salad").Id, IngredientId = FindIngredient("Parmesan").Id },
                 new() { RecipeId = FindRecipe("Caesar Salad").Id, IngredientId = FindIngredient("Mayonnaise").Id },
                 new() { RecipeId = FindRecipe("Caesar Salad").Id, IngredientId = FindIngredient("Lemon").Id },
 
-                // Burger
                 new() { RecipeId = FindRecipe("Burger").Id, IngredientId = FindIngredient("Beef").Id },
                 new() { RecipeId = FindRecipe("Burger").Id, IngredientId = FindIngredient("Bread").Id },
                 new() { RecipeId = FindRecipe("Burger").Id, IngredientId = FindIngredient("Lettuce").Id },
@@ -311,21 +282,18 @@ public static class DbSeeder
                 new() { RecipeId = FindRecipe("Burger").Id, IngredientId = FindIngredient("Ketchup").Id },
                 new() { RecipeId = FindRecipe("Burger").Id, IngredientId = FindIngredient("Mustard").Id },
 
-                // Shrimp Pasta
                 new() { RecipeId = FindRecipe("Shrimp Pasta").Id, IngredientId = FindIngredient("Shrimp").Id },
                 new() { RecipeId = FindRecipe("Shrimp Pasta").Id, IngredientId = FindIngredient("Pasta").Id },
                 new() { RecipeId = FindRecipe("Shrimp Pasta").Id, IngredientId = FindIngredient("Garlic").Id },
                 new() { RecipeId = FindRecipe("Shrimp Pasta").Id, IngredientId = FindIngredient("Butter").Id },
                 new() { RecipeId = FindRecipe("Shrimp Pasta").Id, IngredientId = FindIngredient("Lemon").Id },
 
-                // Vegetable Omelette
                 new() { RecipeId = FindRecipe("Vegetable Omelette").Id, IngredientId = FindIngredient("Eggs").Id },
                 new() { RecipeId = FindRecipe("Vegetable Omelette").Id, IngredientId = FindIngredient("Onion").Id },
                 new() { RecipeId = FindRecipe("Vegetable Omelette").Id, IngredientId = FindIngredient("Tomato").Id },
                 new() { RecipeId = FindRecipe("Vegetable Omelette").Id, IngredientId = FindIngredient("Green Pepper").Id },
                 new() { RecipeId = FindRecipe("Vegetable Omelette").Id, IngredientId = FindIngredient("Butter").Id },
 
-                // Chicken Rice Bowl
                 new() { RecipeId = FindRecipe("Chicken Rice Bowl").Id, IngredientId = FindIngredient("Chicken").Id },
                 new() { RecipeId = FindRecipe("Chicken Rice Bowl").Id, IngredientId = FindIngredient("Rice").Id },
                 new() { RecipeId = FindRecipe("Chicken Rice Bowl").Id, IngredientId = FindIngredient("Carrot").Id },
