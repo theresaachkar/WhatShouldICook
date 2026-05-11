@@ -3,7 +3,6 @@ import {
   Stack,
   Typography,
   Paper,
-  Grid,
   TextField,
   Button,
   Alert,
@@ -11,6 +10,7 @@ import {
   CircularProgress,
   Chip,
   Divider,
+  Box,
 } from "@mui/material";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
@@ -145,6 +145,61 @@ export default function Planner() {
       setError("Failed to clear planner.");
     }
   };
+
+  const renderMealInput = (dayIndex, mealType, value) => (
+    <Autocomplete
+      freeSolo
+      fullWidth
+      sx={{ width: "100%" }}
+      options={recipeOptions}
+      slotProps={{
+        popper: {
+          sx: {
+            minWidth: 420,
+            maxWidth: 520,
+            "& .MuiAutocomplete-listbox": {
+              maxHeight: 320,
+              overflowX: "hidden",
+            },
+            "& .MuiAutocomplete-option": {
+              whiteSpace: "normal",
+              lineHeight: 1.4,
+              fontSize: 16,
+              py: 1.2,
+              wordBreak: "break-word",
+            },
+          },
+        },
+      }}
+      getOptionLabel={(option) =>
+        typeof option === "string" ? option : option.label
+      }
+      value={value}
+      onChange={(_, newValue) => {
+        if (typeof newValue === "string") {
+          updateMeal(dayIndex, mealType, newValue);
+        } else {
+          updateMeal(dayIndex, mealType, newValue?.value ?? "");
+        }
+      }}
+      inputValue={value}
+      onInputChange={(_, newInputValue) =>
+        updateMeal(dayIndex, mealType, newInputValue)
+      }
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          fullWidth
+          placeholder="Type or choose a recipe"
+          sx={{
+            "& .MuiInputBase-root": {
+              minHeight: 60,
+            },
+          }}
+        />
+      )}
+    />
+  );
 
   if (loading) {
     return (
@@ -286,178 +341,49 @@ export default function Planner() {
 
               <Divider />
 
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={4}>
-                  <Stack spacing={1}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <BreakfastDiningRoundedIcon color="primary" fontSize="small" />
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                        Breakfast
-                      </Typography>
-                    </Stack>
-
-                    <Autocomplete
-                      freeSolo
-                      options={recipeOptions}
-                      getOptionLabel={(option) =>
-                        typeof option === "string" ? option : option.label
-                      }
-                      value={row.breakfast}
-                      onChange={(_, newValue) => {
-                        if (typeof newValue === "string") {
-                          updateMeal(index, "breakfast", newValue);
-                        } else {
-                          updateMeal(index, "breakfast", newValue?.value ?? "");
-                        }
-                      }}
-                      inputValue={row.breakfast}
-                      onInputChange={(_, newInputValue) =>
-                        updateMeal(index, "breakfast", newInputValue)
-                      }
-                      ListboxProps={{
-                        sx: {
-                          fontSize: 16,
-                          maxHeight: 320,
-                          minWidth: 320,
-                        },
-                      }}
-                      renderOption={(props, option) => (
-                        <li
-                          {...props}
-                          style={{
-                            whiteSpace: "nowrap",
-                            fontSize: "16px",
-                            padding: "10px 14px",
-                          }}
-                        >
-                          {option.label}
-                        </li>
-                      )}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          fullWidth
-                          placeholder="Type or choose a recipe"
-                        />
-                      )}
-                    />
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: {
+                    xs: "1fr",
+                    md: "repeat(3, minmax(260px, 1fr))",
+                  },
+                  gap: 2,
+                }}
+              >
+                <Stack spacing={1} sx={{ minWidth: 0 }}>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <BreakfastDiningRoundedIcon color="primary" fontSize="small" />
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                      Breakfast
+                    </Typography>
                   </Stack>
-                </Grid>
 
-                <Grid item xs={12} md={4}>
-                  <Stack spacing={1}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <LunchDiningRoundedIcon color="primary" fontSize="small" />
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                        Lunch
-                      </Typography>
-                    </Stack>
+                  {renderMealInput(index, "breakfast", row.breakfast)}
+                </Stack>
 
-                    <Autocomplete
-                      freeSolo
-                      options={recipeOptions}
-                      getOptionLabel={(option) =>
-                        typeof option === "string" ? option : option.label
-                      }
-                      value={row.lunch}
-                      onChange={(_, newValue) => {
-                        if (typeof newValue === "string") {
-                          updateMeal(index, "lunch", newValue);
-                        } else {
-                          updateMeal(index, "lunch", newValue?.value ?? "");
-                        }
-                      }}
-                      inputValue={row.lunch}
-                      onInputChange={(_, newInputValue) =>
-                        updateMeal(index, "lunch", newInputValue)
-                      }
-                      ListboxProps={{
-                        sx: {
-                          fontSize: 16,
-                          maxHeight: 320,
-                          minWidth: 320,
-                        },
-                      }}
-                      renderOption={(props, option) => (
-                        <li
-                          {...props}
-                          style={{
-                            whiteSpace: "nowrap",
-                            fontSize: "16px",
-                            padding: "10px 14px",
-                          }}
-                        >
-                          {option.label}
-                        </li>
-                      )}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          fullWidth
-                          placeholder="Type or choose a recipe"
-                        />
-                      )}
-                    />
+                <Stack spacing={1} sx={{ minWidth: 0 }}>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <LunchDiningRoundedIcon color="primary" fontSize="small" />
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                      Lunch
+                    </Typography>
                   </Stack>
-                </Grid>
 
-                <Grid item xs={12} md={4}>
-                  <Stack spacing={1}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <DinnerDiningRoundedIcon color="primary" fontSize="small" />
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                        Dinner
-                      </Typography>
-                    </Stack>
+                  {renderMealInput(index, "lunch", row.lunch)}
+                </Stack>
 
-                    <Autocomplete
-                      freeSolo
-                      options={recipeOptions}
-                      getOptionLabel={(option) =>
-                        typeof option === "string" ? option : option.label
-                      }
-                      value={row.dinner}
-                      onChange={(_, newValue) => {
-                        if (typeof newValue === "string") {
-                          updateMeal(index, "dinner", newValue);
-                        } else {
-                          updateMeal(index, "dinner", newValue?.value ?? "");
-                        }
-                      }}
-                      inputValue={row.dinner}
-                      onInputChange={(_, newInputValue) =>
-                        updateMeal(index, "dinner", newInputValue)
-                      }
-                      ListboxProps={{
-                        sx: {
-                          fontSize: 16,
-                          maxHeight: 320,
-                          minWidth: 320,
-                        },
-                      }}
-                      renderOption={(props, option) => (
-                        <li
-                          {...props}
-                          style={{
-                            whiteSpace: "nowrap",
-                            fontSize: "16px",
-                            padding: "10px 14px",
-                          }}
-                        >
-                          {option.label}
-                        </li>
-                      )}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          fullWidth
-                          placeholder="Type or choose a recipe"
-                        />
-                      )}
-                    />
+                <Stack spacing={1} sx={{ minWidth: 0 }}>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <DinnerDiningRoundedIcon color="primary" fontSize="small" />
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                      Dinner
+                    </Typography>
                   </Stack>
-                </Grid>
-              </Grid>
+
+                  {renderMealInput(index, "dinner", row.dinner)}
+                </Stack>
+              </Box>
             </Stack>
           </Paper>
         ))}
