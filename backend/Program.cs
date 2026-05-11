@@ -12,16 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// JWT settings
 var jwtKey = builder.Configuration["Jwt:Key"]!;
 var jwtIssuer = builder.Configuration["Jwt:Issuer"]!;
 var jwtAudience = builder.Configuration["Jwt:Audience"]!;
 
-// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// CORS for React
 builder.Services.AddCors();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -43,7 +40,6 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// seed data
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -52,8 +48,6 @@ using (var scope = app.Services.CreateScope())
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-// app.UseHttpsRedirection();
 
 app.UseCors(policy =>
     policy.WithOrigins("http://localhost:5173")
@@ -64,9 +58,7 @@ app.UseCors(policy =>
 app.UseAuthentication();
 app.UseAuthorization();
 
-// --------------------
-// Helper functions
-// --------------------
+
 int? GetUserId(HttpContext http)
 {
     var userIdClaim = http.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -98,9 +90,7 @@ string CreateToken(User user, string key, string issuer, string audience)
     return new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler().WriteToken(token);
 }
 
-// --------------------
-// Public endpoints
-// --------------------
+
 app.MapGet("/", () =>
     Results.Ok("Backend is running ✅ Try /swagger")
 );
@@ -251,9 +241,7 @@ app.MapGet("/api/recipes/{id:int}", async (AppDbContext db, int id) =>
     return Results.Ok(details);
 });
 
-// --------------------
-// Protected endpoints
-// --------------------
+
 app.MapPost("/api/history/{recipeId:int}", async (HttpContext http, AppDbContext db, int recipeId) =>
 {
     var userId = GetUserId(http);
@@ -501,7 +489,6 @@ app.MapPut("/api/planner", async (HttpContext http, AppDbContext db, [FromBody] 
 
 app.Run();
 
-// Records
 public record SuggestRequest(int[] IngredientIds, int AllowMissing = 2, int AvoidLastDays = 7);
 public record MealPlanDayDto(string Day, string Breakfast, string Lunch, string Dinner);
 public record RegisterRequest(string Name, string Email, string Password);
