@@ -1,8 +1,12 @@
 import * as React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+
 import DashboardLayout from "./layout/DashboardLayout";
 import { ToastProvider } from "./components/Toast";
+
+import PublicHome from "./pages/PublicHome";
+import Browse from "./pages/Browse";
 import Dashboard from "./pages/Dashboard";
 import Ingredients from "./pages/Ingredients";
 import Suggestions from "./pages/Suggestions";
@@ -19,100 +23,72 @@ import { AuthProvider, useAuth } from "./state/AuthState";
 const theme = createTheme({
   palette: {
     mode: "light",
-    primary: {
-      main: "#6D4C41"
-    },
-    secondary: {
-      main: "#FFB74D"
-    },
-    background: {
-      default: "#F8F6F3",
-      paper: "#FFFFFF"
-    },
-    success: {
-      main: "#43A047"
-    },
-    warning: {
-      main: "#FB8C00"
-    },
-    error: {
-      main: "#E53935"
-    }
+    primary: { main: "#6D4C41" },
+    secondary: { main: "#FFB74D" },
+    background: { default: "#F8F6F3", paper: "#FFFFFF" },
+    success: { main: "#43A047" },
+    warning: { main: "#FB8C00" },
+    error: { main: "#E53935" },
   },
   typography: {
     fontFamily: ["Inter", "Segoe UI", "Roboto", "Arial", "sans-serif"].join(","),
-    h4: {
-      fontWeight: 900
-    },
-    h5: {
-      fontWeight: 900
-    },
-    h6: {
-      fontWeight: 800
-    },
-    button: {
-      textTransform: "none",
-      fontWeight: 700
-    }
+    h4: { fontWeight: 900 },
+    h5: { fontWeight: 900 },
+    h6: { fontWeight: 800 },
+    button: { textTransform: "none", fontWeight: 700 },
   },
-  shape: {
-    borderRadius: 16
-  },
+  shape: { borderRadius: 16 },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          background: "linear-gradient(180deg, #F8F6F3 0%, #F4F1EC 100%)"
-        }
-      }
+          background: "linear-gradient(180deg, #F8F6F3 0%, #F4F1EC 100%)",
+        },
+      },
     },
     MuiCard: {
       styleOverrides: {
         root: {
           borderRadius: 20,
           boxShadow: "0 10px 30px rgba(0,0,0,0.06)",
-          border: "1px solid rgba(0,0,0,0.04)"
-        }
-      }
+          border: "1px solid rgba(0,0,0,0.04)",
+        },
+      },
     },
     MuiPaper: {
       styleOverrides: {
         root: {
           borderRadius: 20,
-          boxShadow: "0 8px 24px rgba(0,0,0,0.05)"
-        }
-      }
+          boxShadow: "0 8px 24px rgba(0,0,0,0.05)",
+        },
+      },
     },
     MuiButton: {
-      defaultProps: {
-        disableElevation: true
-      },
+      defaultProps: { disableElevation: true },
       styleOverrides: {
         root: {
           borderRadius: 14,
           paddingLeft: 16,
           paddingRight: 16,
-          minHeight: 42
+          minHeight: 42,
         },
         contained: {
-          boxShadow: "0 8px 18px rgba(109, 76, 65, 0.18)"
-        }
-      }
+          boxShadow: "0 8px 18px rgba(109, 76, 65, 0.18)",
+        },
+      },
     },
     MuiChip: {
       styleOverrides: {
         root: {
           borderRadius: 12,
-          fontWeight: 600
-        }
-      }
+          fontWeight: 600,
+        },
+      },
     },
     MuiTextField: {
-      defaultProps: {
-        size: "medium"
-      }
-    }
-  }
+      defaultProps: { size: "medium" },
+    },
+  },
 });
 
 function ProtectedRoute({ children }) {
@@ -124,105 +100,136 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
-function PublicRoute({ children }) {
+function PublicOnlyRoute({ children }) {
   const { loading, isAuthenticated } = useAuth();
 
   if (loading) return null;
-  if (isAuthenticated) return <Navigate to="/" replace />;
+  if (isAuthenticated) return <Navigate to="/dashboard" replace />;
 
   return children;
 }
 
+function AppShell({ children }) {
+  return <DashboardLayout>{children}</DashboardLayout>;
+}
+
 function AppRoutes() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Routes>
       <Route
-        path="/login"
+        path="/"
         element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <PublicRoute>
-            <Register />
-          </PublicRoute>
+          isAuthenticated ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <AppShell>
+              <PublicHome />
+            </AppShell>
+          )
         }
       />
 
       <Route
-        path="/"
+        path="/login"
         element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <Dashboard />
-            </DashboardLayout>
-          </ProtectedRoute>
+          <PublicOnlyRoute>
+            <Login />
+          </PublicOnlyRoute>
         }
       />
+
+      <Route
+        path="/register"
+        element={
+          <PublicOnlyRoute>
+            <Register />
+          </PublicOnlyRoute>
+        }
+      />
+
+      <Route
+        path="/browse"
+        element={
+          <AppShell>
+            <Browse />
+          </AppShell>
+        }
+      />
+
       <Route
         path="/ingredients"
         element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <Ingredients />
-            </DashboardLayout>
-          </ProtectedRoute>
+          <AppShell>
+            <Ingredients />
+          </AppShell>
         }
       />
+
       <Route
         path="/suggestions"
         element={
+          <AppShell>
+            <Suggestions />
+          </AppShell>
+        }
+      />
+
+      <Route
+        path="/recipes/:id"
+        element={
+          <AppShell>
+            <RecipeDetails />
+          </AppShell>
+        }
+      />
+
+      <Route
+        path="/dashboard"
+        element={
           <ProtectedRoute>
-            <DashboardLayout>
-              <Suggestions />
-            </DashboardLayout>
+            <AppShell>
+              <Dashboard />
+            </AppShell>
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/favorites"
         element={
           <ProtectedRoute>
-            <DashboardLayout>
+            <AppShell>
               <Favorites />
-            </DashboardLayout>
+            </AppShell>
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/history"
         element={
           <ProtectedRoute>
-            <DashboardLayout>
+            <AppShell>
               <History />
-            </DashboardLayout>
+            </AppShell>
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/planner"
         element={
           <ProtectedRoute>
-            <DashboardLayout>
+            <AppShell>
               <Planner />
-            </DashboardLayout>
+            </AppShell>
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/recipes/:id"
-        element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <RecipeDetails />
-            </DashboardLayout>
-          </ProtectedRoute>
-        }
-      />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

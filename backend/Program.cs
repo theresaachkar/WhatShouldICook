@@ -283,6 +283,7 @@ app.MapGet("/api/history", async (HttpContext http, AppDbContext db) =>
     return Results.Ok(result);
 }).RequireAuthorization();
 
+
 app.MapDelete("/api/history/{id:int}", async (HttpContext http, AppDbContext db, int id) =>
 {
     var userId = GetUserId(http);
@@ -301,66 +302,80 @@ app.MapDelete("/api/history/{id:int}", async (HttpContext http, AppDbContext db,
 }).RequireAuthorization();
 
 app.MapPost("/api/suggestions", async (HttpContext http, AppDbContext db, SuggestRequest req) =>
-{
-    var userId = GetUserId(http);
-    if (userId is null) return Results.Unauthorized();
-
-    var selected = req.IngredientIds?.Distinct().ToHashSet() ?? new HashSet<int>();
-
-    if (selected.Count == 0)
     {
-        return Results.Ok(new List<object>());
-    }
+        var userId = GetUserId(http);
 
-    var cutoff = DateTime.UtcNow.AddDays(-req.AvoidLastDays);
+        var selected = req.IngredientIds?.Distinct().ToHashSet() ?? new HashSet<int>();
 
-    var cookedRecently = await db.CookHistories
-        .Where(h => h.UserId == userId.Value && h.CookedAt >= cutoff)
-        .Select(h => h.RecipeId)
-        .ToListAsync();
-
-    var cookedRecentlySet = cookedRecently.ToHashSet();
-
-    var recipes = await db.Recipes
-        .Include(r => r.RecipeIngredients)
-            .ThenInclude(ri => ri.Ingredient)
-        .ToListAsync();
-
-    var ranked = recipes
-        .Where(r => !cookedRecentlySet.Contains(r.Id))
-        .Select(r =>
+        if (selected.Count == 0)
         {
-            var ingredientIds = r.RecipeIngredients.Select(ri => ri.IngredientId).ToArray();
-            var total = ingredientIds.Length;
-            var match = ingredientIds.Count(id => selected.Contains(id));
-            var missingIds = ingredientIds.Where(id => !selected.Contains(id)).ToArray();
-            var percent = total == 0 ? 0 : (int)Math.Round((double)match / total * 100);
+            return Results.Ok(new List<object>());
+        }
 
-            var missingNames = r.RecipeIngredients
-                .Where(ri => missingIds.Contains(ri.IngredientId))
-                .Select(ri => ri.Ingredient.Name)
-                .ToArray();
+        HashSet<int> cookedRecentlySet = new();
 
-            return new
+        // only apply history filtering if user is logged in
+        if (userId is not null)
+        {
+            var cutoff = DateTime.UtcNow.AddDays(-req.AvoidLastDays);
+
+            var cookedRecently = await db.CookHistories
+                .Where(h => h.UserId == userId.Value && h.CookedAt >= cutoff)
+                .Select(h => h.RecipeId)
+                .ToListAsync();
+
+            cookedRecentlySet = cookedRecently.ToHashSet();
+        }
+
+        var recipes = await db.Recipes
+            .Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient)
+            .ToListAsync();
+
+        var ranked = recipes
+            .Where(r => !cookedRecentlySet.Contains(r.Id))
+            .Select(r =>
             {
-                id = r.Id,
-                title = r.Title,
-                minutes = r.Minutes,
-                match,
-                total,
-                matchPercent = percent,
-                missingCount = missingIds.Length,
-                missingIngredients = missingNames
-            };
-        })
-        .Where(x => x.match > 0 && x.missingCount <= req.AllowMissing)
-        .OrderByDescending(x => x.matchPercent)
-        .ThenBy(x => x.missingCount)
-        .ThenBy(x => x.minutes)
-        .ToList();
+                var ingredientIds = r.RecipeIngredients.Select(ri => ri.IngredientId).ToArray();
 
-    return Results.Ok(ranked);
-}).RequireAuthorization();
+                var total = ingredientIds.Length;
+
+                var match = ingredientIds.Count(id => selected.Contains(id));
+
+                var missingIds = ingredientIds
+                    .Where(id => !selected.Contains(id))
+                    .ToArray();
+
+                var percent = total == 0
+                    ? 0
+                    : (int)Math.Round((double)match / total * 100);
+
+                var missingNames = r.RecipeIngredients
+                    .Where(ri => missingIds.Contains(ri.IngredientId))
+                    .Select(ri => ri.Ingredient.Name)
+                    .ToArray();
+
+                return new
+                {
+                    id = r.Id,
+                    title = r.Title,
+                    minutes = r.Minutes,
+                    match,
+                    total,
+                    matchPercent = percent,
+                    missingCount = missingIds.Length,
+                    missingIngredients = missingNames
+                };
+            })
+            .Where(x => x.match > 0)
+            .OrderByDescending(x => x.matchPercent)
+            .ThenBy(x => x.missingCount)
+            .ThenBy(x => x.minutes)
+            .ToList();
+
+        return Results.Ok(ranked);
+    });
+
 
 app.MapPost("/api/favorites/{recipeId:int}", async (HttpContext http, AppDbContext db, int recipeId) =>
 {
@@ -370,7 +385,10 @@ app.MapPost("/api/favorites/{recipeId:int}", async (HttpContext http, AppDbConte
     var recipeExists = await db.Recipes.AnyAsync(r => r.Id == recipeId);
     if (!recipeExists) return Results.NotFound(new { message = "Recipe not found." });
 
-    var exists = await db.Favorites.AnyAsync(f => f.UserId == userId.Value && f.RecipeId == recipeId);
+    var exists = await db.Favorites.AnyAsync(f =>
+        f.UserId == userId.Value && f.RecipeId == recipeId
+    );
+
     if (!exists)
     {
         db.Favorites.Add(new Favorite
@@ -384,6 +402,7 @@ app.MapPost("/api/favorites/{recipeId:int}", async (HttpContext http, AppDbConte
 
     return Results.Ok(new { message = "Added to favorites" });
 }).RequireAuthorization();
+
 
 app.MapDelete("/api/favorites/{recipeId:int}", async (HttpContext http, AppDbContext db, int recipeId) =>
 {
